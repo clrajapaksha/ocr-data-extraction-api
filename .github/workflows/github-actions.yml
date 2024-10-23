@@ -47,8 +47,7 @@ jobs:
     - name: Build and push container image to registry
       uses: docker/build-push-action@v6
       with:
-        platforms: linux/amd64,linux/arm64
-        tags: user/app:latest
+        tags: ocrappregistry.azurecr.io/ocr-data-extraction-api:${{ github.sha }}
         secrets: |
           api_key: ${{ secrets.API_KEY }}
           azure_storage_account: ${{ secrets.AZURE_STORAGE_ACCOUNT }}
