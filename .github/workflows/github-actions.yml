@@ -49,11 +49,11 @@ jobs:
       with:
         tags: ocrappregistry.azurecr.io/ocr-data-extraction-api:${{ github.sha }}
         secrets: |
-          api_key: ${{ secrets.API_KEY }}
-          azure_storage_account: ${{ secrets.AZURE_STORAGE_ACCOUNT }}
-          azure_storage_account_key: ${{ secrets.AZURE_STORAGE_ACCOUNT_KEY }}
-          azure_storage_connection_string: ${{ secrets.AZURE_STORAGE_CONNECTION_STRING }}
-          container_name: ${{ secrets.CONTAINER_NAME }}
+          "api_key=${{ secrets.API_KEY }}"
+          "azure_storage_account=${{ secrets.AZURE_STORAGE_ACCOUNT }}"
+          "azure_storage_account_key=${{ secrets.AZURE_STORAGE_ACCOUNT_KEY }}"
+          "azure_storage_connection_string=${{ secrets.AZURE_STORAGE_CONNECTION_STRING }}"
+          "container_name=${{ secrets.CONTAINER_NAME }}"
 #      run: |
 #        docker build . -t ocrappregistry.azurecr.io/ocr-data-extraction-api:${{ github.sha }}
 #        docker push ocrappregistry.azurecr.io/ocr-data-extraction-api:${{ github.sha }}
