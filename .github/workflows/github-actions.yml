@@ -11,13 +11,13 @@ permissions:
 
 jobs:
   build-and-deploy:
-    env:
-      PORT: 8000
-      API_KEY: ${{ secrets.API_KEY }}
-      AZURE_STORAGE_ACCOUNT: ${{ secrets.AZURE_STORAGE_ACCOUNT }}
-      AZURE_STORAGE_ACCOUNT_KEY: ${{ secrets.AZURE_STORAGE_ACCOUNT_KEY }}
-      AZURE_STORAGE_CONNECTION_STRING: ${{ secrets.AZURE_STORAGE_CONNECTION_STRING }}
-      CONTAINER_NAME: ${{ secrets.CONTAINER_NAME }}
+#    env:
+#      PORT: 8000
+#      API_KEY: ${{ secrets.API_KEY }}
+#      AZURE_STORAGE_ACCOUNT: ${{ secrets.AZURE_STORAGE_ACCOUNT }}
+#      AZURE_STORAGE_ACCOUNT_KEY: ${{ secrets.AZURE_STORAGE_ACCOUNT_KEY }}
+#      AZURE_STORAGE_CONNECTION_STRING: ${{ secrets.AZURE_STORAGE_CONNECTION_STRING }}
+#      CONTAINER_NAME: ${{ secrets.CONTAINER_NAME }}
 
     runs-on: ubuntu-latest
     environment: staging
@@ -45,9 +45,19 @@ jobs:
 
 
     - name: Build and push container image to registry
-      run: |
-        docker build . -t ocrappregistry.azurecr.io/ocr-data-extraction-api:${{ github.sha }}
-        docker push ocrappregistry.azurecr.io/ocr-data-extraction-api:${{ github.sha }}
+      uses: docker/build-push-action@v6
+      with:
+        platforms: linux/amd64,linux/arm64
+        tags: user/app:latest
+        secrets: |
+          api_key: ${{ secrets.API_KEY }}
+          azure_storage_account: ${{ secrets.AZURE_STORAGE_ACCOUNT }}
+          azure_storage_account_key: ${{ secrets.AZURE_STORAGE_ACCOUNT_KEY }}
+          azure_storage_connection_string: ${{ secrets.AZURE_STORAGE_CONNECTION_STRING }}
+          container_name: ${{ secrets.CONTAINER_NAME }}
+#      run: |
+#        docker build . -t ocrappregistry.azurecr.io/ocr-data-extraction-api:${{ github.sha }}
+#        docker push ocrappregistry.azurecr.io/ocr-data-extraction-api:${{ github.sha }}
         
 
     - name: Deploy to App Service
