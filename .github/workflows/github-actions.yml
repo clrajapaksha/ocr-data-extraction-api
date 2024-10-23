@@ -7,7 +7,15 @@ on:
 
 jobs:
   build-and-deploy:
+    env:
+      API_KEY: ${{ secrets.API_KEY }}
+      AZURE_STORAGE_ACCOUNT: ${{ secrets.AZURE_STORAGE_ACCOUNT }}
+      AZURE_STORAGE_ACCOUNT_KEY: ${{ secrets.AZURE_STORAGE_ACCOUNT_KEY }}
+      AZURE_STORAGE_CONNECTION_STRING: ${{ secrets.AZURE_STORAGE_CONNECTION_STRING }}
+      CONTAINER_NAME: ${{ secrets.CONTAINER_NAME }}
+
     runs-on: ubuntu-latest
+    environment: staging
 
     steps:
 
@@ -15,10 +23,12 @@ jobs:
       uses: actions/checkout@main
 
 
-#    - name: Login via Azure CLI
-#      uses: azure/login@v1
-#      with:
-#        creds: ${{ secrets.AZURE_CREDENTIALS }}
+    - name: Login via Azure CLI
+      uses: azure/login@v1
+      with:
+        client-id: ${{ secrets.AZURE_CLIENT_ID }}
+        tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+        subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
 
 
     - name: Login to Azure Container Registry
@@ -35,12 +45,12 @@ jobs:
         docker push ocrappregistry.azurecr.io/ocr-data-extraction-api:${{ github.sha }}
         
 
-#    - name: Deploy to App Service
-#      uses: azure/webapps-deploy@v2
-#      with:
-#        app-name: 'ocr-data-extraction-api'
-#        images: 'ocrappregistry.azurecr.io/ocr-data-extraction-api:${{ github.sha }}'
-#        slot-name: 'staging'
+    - name: Deploy to App Service
+      uses: azure/webapps-deploy@v2
+      with:
+        app-name: 'ocr-data-extraction-api'
+        images: 'ocrappregistry.azurecr.io/ocr-data-extraction-api:${{ github.sha }}'
+
 
 
     - name: Azure logout
